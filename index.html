@@ -67,11 +67,8 @@
         }
         .search-area i { position: absolute; left: 15px; top: 12px; color: #00d9ff; }
 
-        /* MODÜLLER (PARÇALAR) */
-        .main-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 25px; padding: 40px; 
-        }
+        /* MODÜLLER */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 40px; }
         .module-card { 
             background: rgba(13, 17, 23, 0.85); border: 1px solid #30363d; 
             border-radius: 15px; padding: 25px; position: relative; 
@@ -88,8 +85,6 @@
             border-top: 1px solid rgba(0, 217, 255, 0.2); font-size: 12px; color: #00d9ff;
             display: flex; justify-content: space-between;
         }
-
-        /* GÖRSEL PARÇALAR */
         .hero-section {
             grid-column: span 2; background: url('https://i.ibb.co/vYfzq5w/cyber-security-lock.jpg') center/cover;
             height: 200px; border-radius: 15px; border: 1px solid #00d9ff; padding: 30px;
@@ -101,7 +96,7 @@
 
     <div id="login-screen">
         <div class="login-box">
-            <img src="logo.png" alt="LANK Logo">
+            <img src="https://i.ibb.co/xt8TppJy/logo.png" alt="LANK Logo">
             <h2 style="color:#00d9ff; margin-bottom:10px;">LANK AI SECURITY</h2>
             <input type="text" id="username" placeholder="Operatör ID (Admin)">
             <input type="password" id="password" placeholder="Şifre">
@@ -112,7 +107,7 @@
 
     <div id="dashboard">
         <div id="sidebar">
-            <img src="logo.png" class="side-logo" alt="L">
+            <img src="https://i.ibb.co/xt8TppJy/logo.png" class="side-logo" alt="L">
             <div class="menu-btn"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></div>
             <div class="menu-btn"><i class="fa-solid fa-shield-halved"></i><span>Güvenlik Duvarı</span></div>
             <div class="menu-btn"><i class="fa-solid fa-brain"></i><span>AI Analiz</span></div>
@@ -202,9 +197,7 @@
         }
 
         async function runProcess(command) {
-            // Render URL'ni buraya yapıştır
             const url = 'https://lank-sec.onrender.com/islem';
-            
             try {
                 let response = await fetch(url, {
                     method: 'POST',
@@ -214,7 +207,7 @@
                 let data = await response.json();
                 alert("SUNUCU CEVABI: " + data.mesaj);
             } catch (err) {
-                alert("HATA: Sunucuya bağlanılamadı! (URL'yi kontrol et)");
+                alert("HATA: Sunucuya bağlanılamadı!");
             }
         }
     </script>
