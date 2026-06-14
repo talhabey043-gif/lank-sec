@@ -5,56 +5,32 @@
     <title>LANK | Operasyon Merkezi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-        body { margin: 0; background: #010406; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; overflow: hidden; }
-        
-        /* GİRİŞ EKRANI */
-        #login-screen { display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed; background: radial-gradient(circle, #0a1921 0%, #010406 100%); z-index: 1000; }
-        .login-box { border: 1px solid #00d9ff; padding: 40px; border-radius: 20px; text-align: center; width: 380px; background: rgba(10, 14, 18, 0.9); box-shadow: 0 0 50px rgba(0, 217, 255, 0.3); }
-        .login-box input { width: 100%; padding: 12px; margin: 10px 0; background: #161b22; border: 1px solid #30363d; color: #00d9ff; border-radius: 8px; outline: none; }
-        .login-box button { width: 100%; padding: 12px; background: #00d9ff; border: none; color: #000; font-weight: bold; cursor: pointer; border-radius: 8px; }
-
-        /* DASHBOARD */
+        /* ... Eski stiller korunmalı ... */
+        body { margin: 0; background: #010406; color: #fff; font-family: sans-serif; height: 100vh; overflow: hidden; }
         #dashboard { display: none; height: 100vh; width: 100vw; display: flex; }
-        #sidebar { width: 80px; background: #0a0e12; border-right: 1px solid #00d9ff; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
-        #sidebar:hover { width: 220px; }
-        .menu-btn { width: 100%; padding: 20px; color: #8b949e; cursor: pointer; display: flex; align-items: center; }
-        .menu-btn:hover { background: #161b22; color: #00d9ff; }
         
-        #content { flex-grow: 1; overflow-y: auto; padding: 20px; }
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        
-        /* MODÜLLER */
-        .module-card { background: rgba(13, 17, 23, 0.85); border: 1px solid #30363d; border-radius: 15px; padding: 20px; cursor: pointer; position: relative; }
-        .module-card:hover { border-color: #00d9ff; transform: translateY(-5px); }
-        .ai-chat-card { background: #0a0e12; border: 1px solid #00d9ff; padding: 0; cursor: default; grid-column: span 1; }
+        /* MODAL PENCERE */
+        .modal { display: none; position: fixed; top: 10%; left: 10%; width: 80%; height: 80%; background: #0d1117; border: 1px solid #00d9ff; border-radius: 15px; z-index: 2000; padding: 20px; box-shadow: 0 0 30px rgba(0,217,255,0.5); }
+        .close-btn { color: #00d9ff; cursor: pointer; float: right; font-size: 24px; }
+
+        /* AI CHAT SABİT ALAN */
+        #ai-sidebar { width: 300px; border-left: 1px solid #30363d; background: #0a0e12; display: flex; flex-direction: column; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <input type="text" id="username" placeholder="Operatör ID">
-            <input type="password" id="password" placeholder="Şifre">
-            <button onclick="checkLogin()">SİSTEME GİRİŞ YAP</button>
-        </div>
-    </div>
+    <div id="login-screen">...</div>
 
     <div id="dashboard">
         <div id="sidebar">
-            <div class="menu-btn"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></div>
-            <div class="menu-btn"><i class="fa-solid fa-robot"></i><span>AI Analiz</span></div>
+            <img src="https://i.ibb.co/xt8TppJy/logo.png" class="side-logo">
+            <div class="menu-btn" onclick="openModal('SİSTEM DURUMU', 'Sistem tüm protokolleri ile çalışıyor.')">
+                <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+            </div>
         </div>
 
-        <div id="content">
+        <div id="content" style="flex-grow:1; padding: 20px;">
             <div class="main-grid">
-                <div class="module-card ai-chat-card">
-                    <div style="padding: 10px; border-bottom: 1px solid #30363d; font-weight: bold; color: #00d9ff;">
-                        LANK AI ASİSTAN
-                    </div>
-                    <iframe src="https://www.chatbase.co/chatbot-iframe/SENIN_CHATBASE_ID_BURAYA" width="100%" height="250" frameborder="0"></iframe>
-                </div>
-
                 <div class="module-card" onclick="runProcess('ai')">
                     <i class="fa-solid fa-robot"></i><h3>AI Analiz</h3>
                 </div>
@@ -63,18 +39,31 @@
                 </div>
             </div>
         </div>
+
+        <div id="ai-sidebar">
+            <div style="padding:15px; color:#00d9ff; font-weight:bold;">LANK AI ASİSTAN</div>
+            <iframe src="https://www.chatbase.co/chatbot-iframe/SENIN_CHATBASE_ID" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <div id="actionModal" class="modal">
+        <span class="close-btn" onclick="document.getElementById('actionModal').style.display='none'">&times;</span>
+        <h2 id="modalTitle" style="color:#00d9ff;"></h2>
+        <div id="modalContent"></div>
     </div>
 
     <script>
-        function checkLogin() {
-            if(document.getElementById('username').value === "admin" && document.getElementById('password').value === "talhalank") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'flex';
-            } else { alert("Hatalı!"); }
+        // Modal açma fonksiyonu
+        function openModal(title, content) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('actionModal').style.display = 'block';
         }
 
+        // İşlem fonksiyonu güncellendi
         async function runProcess(command) {
-            console.log("Komut gönderiliyor: " + command);
+            openModal("İŞLEM BAŞLATILIYOR...", "Lütfen bekleyin, sunucu ile iletişim kuruluyor...");
+            
             try {
                 let response = await fetch('https://lank-sec.onrender.com/islem', {
                     method: 'POST',
@@ -82,9 +71,9 @@
                     body: JSON.stringify({komut: command})
                 });
                 let data = await response.json();
-                alert("SUNUCU: " + data.mesaj);
+                document.getElementById('modalContent').innerHTML = `<h3>Sonuç:</h3><p>${data.mesaj}</p>`;
             } catch (err) {
-                alert("HATA: Sunucuya ulaşılamadı (Render uyku modunda olabilir!)");
+                document.getElementById('modalContent').innerHTML = "HATA: Sunucu şu an uyku modunda olabilir.";
             }
         }
     </script>
