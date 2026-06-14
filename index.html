@@ -5,209 +5,86 @@
     <title>LANK | Operasyon Merkezi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* TEMEL AYARLAR */
         * { box-sizing: border-box; transition: all 0.3s ease; }
         body { margin: 0; background: #010406; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; overflow: hidden; }
-
-        /* GİRİŞ EKRANI */
-        #login-screen { 
-            display: flex; justify-content: center; align-items: center; 
-            width: 100vw; height: 100vh; position: fixed; 
-            background: radial-gradient(circle, #0a1921 0%, #010406 100%); z-index: 1000; 
-        }
-        .login-box { 
-            border: 1px solid #00d9ff; padding: 40px; border-radius: 20px; 
-            text-align: center; width: 380px; background: rgba(10, 14, 18, 0.9); 
-            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
-        }
-        .login-box img { width: 140px; filter: drop-shadow(0 0 10px #00d9ff); margin-bottom: 20px; }
-        .login-box input { 
-            width: 100%; padding: 12px; margin: 10px 0; background: #161b22; 
-            border: 1px solid #30363d; color: #00d9ff; border-radius: 8px; outline: none;
-        }
-        .login-box input:focus { border-color: #00d9ff; box-shadow: 0 0 10px #00d9ff; }
-        .login-box button { 
-            width: 100%; padding: 12px; background: #00d9ff; border: none; 
-            color: #000; font-weight: bold; cursor: pointer; border-radius: 8px; margin-top: 10px;
-        }
-        .login-box p { font-size: 12px; color: #555; margin-top: 20px; letter-spacing: 2px; }
-
-        /* ANA PANEL (DASHBOARD) */
-        #dashboard { display: none; height: 100vh; width: 100vw; }
-
-        /* SOL MENÜ (SIDEBAR) */
-        #sidebar { 
-            width: 80px; background: #0a0e12; border-right: 1px solid #00d9ff; 
-            display: flex; flex-direction: column; align-items: center; padding-top: 20px;
-        }
-        #sidebar:hover { width: 220px; }
-        .side-logo { width: 50px; margin-bottom: 40px; filter: drop-shadow(0 0 5px #00d9ff); }
-        .menu-btn { 
-            width: 100%; padding: 20px; color: #8b949e; text-align: left; 
-            cursor: pointer; display: flex; align-items: center; overflow: hidden;
-        }
-        .menu-btn i { font-size: 20px; min-width: 40px; text-align: center; }
-        .menu-btn span { margin-left: 20px; opacity: 0; white-space: nowrap; }
-        #sidebar:hover .menu-btn span { opacity: 1; }
-        .menu-btn:hover { background: #161b22; color: #00d9ff; }
-
-        /* ANA İÇERİK ALANI */
-        #content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; background: url('https://i.ibb.co/L8v8mD5/cyber-bg.jpg') center/cover; }
         
-        /* ÜST BAR */
-        .top-bar { 
-            padding: 20px 40px; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 1px solid rgba(0, 217, 255, 0.2);
-            background: rgba(1, 4, 6, 0.8); backdrop-filter: blur(10px);
-        }
-        .search-area { position: relative; width: 400px; }
-        .search-area input { 
-            width: 100%; padding: 10px 40px; background: #0d1117; 
-            border: 1px solid #30363d; border-radius: 20px; color: #fff; outline: none;
-        }
-        .search-area i { position: absolute; left: 15px; top: 12px; color: #00d9ff; }
+        /* GİRİŞ EKRANI */
+        #login-screen { display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed; background: radial-gradient(circle, #0a1921 0%, #010406 100%); z-index: 1000; }
+        .login-box { border: 1px solid #00d9ff; padding: 40px; border-radius: 20px; text-align: center; width: 380px; background: rgba(10, 14, 18, 0.9); box-shadow: 0 0 50px rgba(0, 217, 255, 0.3); }
+        .login-box input { width: 100%; padding: 12px; margin: 10px 0; background: #161b22; border: 1px solid #30363d; color: #00d9ff; border-radius: 8px; outline: none; }
+        .login-box button { width: 100%; padding: 12px; background: #00d9ff; border: none; color: #000; font-weight: bold; cursor: pointer; border-radius: 8px; }
 
+        /* DASHBOARD */
+        #dashboard { display: none; height: 100vh; width: 100vw; display: flex; }
+        #sidebar { width: 80px; background: #0a0e12; border-right: 1px solid #00d9ff; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+        #sidebar:hover { width: 220px; }
+        .menu-btn { width: 100%; padding: 20px; color: #8b949e; cursor: pointer; display: flex; align-items: center; }
+        .menu-btn:hover { background: #161b22; color: #00d9ff; }
+        
+        #content { flex-grow: 1; overflow-y: auto; padding: 20px; }
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        
         /* MODÜLLER */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 40px; }
-        .module-card { 
-            background: rgba(13, 17, 23, 0.85); border: 1px solid #30363d; 
-            border-radius: 15px; padding: 25px; position: relative; 
-            overflow: hidden; cursor: pointer; backdrop-filter: blur(5px);
-        }
-        .module-card:hover { border-color: #00d9ff; transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 217, 255, 0.2); }
-        .module-card i { font-size: 30px; color: #00d9ff; margin-bottom: 15px; display: block; }
-        .module-card h3 { margin: 0; font-size: 18px; color: #fff; }
-        .module-card p { font-size: 13px; color: #8b949e; margin: 10px 0; }
-
-        /* ALT DURUM ÇUBUĞU */
-        .status-bar { 
-            margin-top: auto; padding: 15px 40px; background: rgba(0, 217, 255, 0.05); 
-            border-top: 1px solid rgba(0, 217, 255, 0.2); font-size: 12px; color: #00d9ff;
-            display: flex; justify-content: space-between;
-        }
-        .hero-section {
-            grid-column: span 2; background: url('https://i.ibb.co/vYfzq5w/cyber-security-lock.jpg') center/cover;
-            height: 200px; border-radius: 15px; border: 1px solid #00d9ff; padding: 30px;
-            display: flex; flex-direction: column; justify-content: center;
-        }
+        .module-card { background: rgba(13, 17, 23, 0.85); border: 1px solid #30363d; border-radius: 15px; padding: 20px; cursor: pointer; position: relative; }
+        .module-card:hover { border-color: #00d9ff; transform: translateY(-5px); }
+        .ai-chat-card { background: #0a0e12; border: 1px solid #00d9ff; padding: 0; cursor: default; grid-column: span 1; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-box">
-            <img src="https://i.ibb.co/xt8TppJy/logo.png" alt="LANK Logo">
-            <h2 style="color:#00d9ff; margin-bottom:10px;">LANK AI SECURITY</h2>
-            <input type="text" id="username" placeholder="Operatör ID (Admin)">
+            <input type="text" id="username" placeholder="Operatör ID">
             <input type="password" id="password" placeholder="Şifre">
             <button onclick="checkLogin()">SİSTEME GİRİŞ YAP</button>
-            <p>LANK'A HOŞGELDİNİZ.</p>
         </div>
     </div>
 
     <div id="dashboard">
         <div id="sidebar">
-            <img src="https://i.ibb.co/xt8TppJy/logo.png" class="side-logo" alt="L">
             <div class="menu-btn"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></div>
-            <div class="menu-btn"><i class="fa-solid fa-shield-halved"></i><span>Güvenlik Duvarı</span></div>
-            <div class="menu-btn"><i class="fa-solid fa-brain"></i><span>AI Analiz</span></div>
-            <div class="menu-btn"><i class="fa-solid fa-terminal"></i><span>Loglar</span></div>
+            <div class="menu-btn"><i class="fa-solid fa-robot"></i><span>AI Analiz</span></div>
         </div>
 
         <div id="content">
-            <div class="top-bar">
-                <div class="search-area">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Sistemde ara (ip, port, protokol)...">
-                </div>
-                <div style="text-align: right;">
-                    <span style="color: #00d9ff; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> SİSTEM AKTİF</span><br>
-                    <small style="color: #8b949e;">Operatör: admin</small>
-                </div>
-            </div>
-
             <div class="main-grid">
-                <div class="hero-section">
-                    <h1 style="margin:0;">Hoş Geldin, Operatör</h1>
-                    <p style="color: #00d9ff;">Sistem v2.0 SOC Protokolü ile korunuyor.</p>
-                </div>
-
-                <div class="module-card" style="background: url('https://i.ibb.co/BccCj3f/world-map-cyber.jpg') center/cover;">
-                    <h3 style="background: rgba(0,0,0,0.7); padding: 5px; border-radius: 5px;">Küresel Tehdit Haritası</h3>
+                <div class="module-card ai-chat-card">
+                    <div style="padding: 10px; border-bottom: 1px solid #30363d; font-weight: bold; color: #00d9ff;">
+                        LANK AI ASİSTAN
+                    </div>
+                    <iframe src="https://www.chatbase.co/chatbot-iframe/SENIN_CHATBASE_ID_BURAYA" width="100%" height="250" frameborder="0"></iframe>
                 </div>
 
                 <div class="module-card" onclick="runProcess('ai')">
-                    <i class="fa-solid fa-robot"></i>
-                    <h3>AI Analiz Merkezi</h3>
-                    <p>Sistemi yapay zeka ile tara ve açıkları raporla.</p>
+                    <i class="fa-solid fa-robot"></i><h3>AI Analiz</h3>
                 </div>
-
-                <div class="module-card" onclick="runProcess('egitim')">
-                    <i class="fa-solid fa-user-graduate"></i>
-                    <h3>Eğitim Modülleri</h3>
-                    <p>Siber güvenlik eğitimlerini ve simülasyonları başlat.</p>
-                </div>
-
-                <div class="module-card" onclick="runProcess('reklam_engelle')">
-                    <i class="fa-solid fa-hand-dots"></i>
-                    <h3>Ad-Blocker</h3>
-                    <p>Reklamları ve zararlı scriptleri otomatik temizle.</p>
-                </div>
-
                 <div class="module-card" onclick="runProcess('temizlik')">
-                    <i class="fa-solid fa-broom"></i>
-                    <h3>Sistem Temizliği</h3>
-                    <p>Geçici dosyaları ve sistem loglarını sıfırla.</p>
+                    <i class="fa-solid fa-broom"></i><h3>Sistem Temizliği</h3>
                 </div>
-
-                <div class="module-card" onclick="runProcess('mail_uyari')">
-                    <i class="fa-solid fa-envelope-circle-check"></i>
-                    <h3>Mail Uyarı</h3>
-                    <p>Kritik durumları e-posta ile raporla.</p>
-                </div>
-
-                <div class="module-card" onclick="runProcess('anonim')">
-                    <i class="fa-solid fa-user-secret"></i>
-                    <h3>Anonim İletişim</h3>
-                    <p>Güvenli ve şifreli hat üzerinden mesaj gönder.</p>
-                </div>
-            </div>
-
-            <div class="status-bar">
-                <span><i class="fa-solid fa-microchip"></i> CPU: %14 | RAM: 2.4GB</span>
-                <span>LANK SECURITY OS © 2026 - TÜM HAKLARI SAKLIDIR</span>
-                <span><i class="fa-solid fa-wifi"></i> Bağlantı: Şifreli (AES-256)</span>
             </div>
         </div>
     </div>
 
     <script>
         function checkLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            if(u === "admin" && p === "talhalank") {
-                document.getElementById('login-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'flex';
-                }, 500);
-            } else {
-                alert("ERİŞİM REDDEDİLDİ: Hatalı Kimlik Bilgileri!");
-            }
+            if(document.getElementById('username').value === "admin" && document.getElementById('password').value === "talhalank") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+            } else { alert("Hatalı!"); }
         }
 
         async function runProcess(command) {
-            const url = 'https://lank-sec.onrender.com/islem';
+            console.log("Komut gönderiliyor: " + command);
             try {
-                let response = await fetch(url, {
+                let response = await fetch('https://lank-sec.onrender.com/islem', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({komut: command})
                 });
                 let data = await response.json();
-                alert("SUNUCU CEVABI: " + data.mesaj);
+                alert("SUNUCU: " + data.mesaj);
             } catch (err) {
-                alert("HATA: Sunucuya bağlanılamadı!");
+                alert("HATA: Sunucuya ulaşılamadı (Render uyku modunda olabilir!)");
             }
         }
     </script>
