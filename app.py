@@ -1,32 +1,31 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 
 app = Flask(__name__)
-# Arayüzün ile sunucunun konuşabilmesi için CORS'u açıyoruz
-CORS(app)
+# Tüm kaynaklardan gelen isteklere izin ver
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-@app.route('/islem', methods=['POST'])
+@app.route('/islem', methods=['POST', 'OPTIONS']) # OPTIONS metodunu ekledik!
 def islem():
+    if request.method == "OPTIONS": # Tarayıcının ön kontrol isteğini burada kabul ediyoruz
+        return jsonify({}), 200
+        
     data = request.json
     komut = data.get('komut')
     
-    # İşlem mantığı
     islemler = {
-        'ai': 'AI Analiz Merkezi: Sistem taraması başlatıldı, tüm portlar güvenli.',
-        'egitim': 'Eğitim Modülü: Siber savunma simülasyonları başarıyla yüklendi.',
-        'temizlik': 'Sistem Temizliği: Önbellek ve geçici dosyalar başarıyla imha edildi.',
-        'reklam_engelle': 'Ad-Blocker: Zararlı reklam scriptleri devre dışı bırakıldı.',
-        'mail_uyari': 'Mail Uyarı: Kritik durum raporu operasyon merkezine iletildi.',
-        'anonim': 'Anonim İletişim: Şifreli tünel kuruldu, bağlantı gizlendi.'
+        'ai': 'AI Analiz Merkezi: Sistem taraması başlatıldı.',
+        'egitim': 'Eğitim Modülü: Simülasyonlar yüklendi.',
+        'temizlik': 'Sistem Temizliği: Önbellek temizlendi.',
+        'reklam_engelle': 'Ad-Blocker: Reklamlar engellendi.',
+        'mail_uyari': 'Mail Uyarı: Rapor gönderildi.',
+        'anonim': 'Anonim İletişim: Tünel aktif.'
     }
     
-    # Eğer komut listede varsa mesajı dön, yoksa hata ver
-    mesaj = islemler.get(komut, "Bilinmeyen Komut: İşlem gerçekleştirilemedi!")
-    
+    mesaj = islemler.get(komut, "Bilinmeyen Komut!")
     return jsonify({"mesaj": mesaj})
 
-# Render veya herhangi bir sunucuda çalışması için standart port ayarı
 if __name__ == '__main__':
+    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
